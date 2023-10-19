@@ -30,7 +30,13 @@ async function run() {
     const productCollection = client.db("techInfoDB").collection("product")
     const cartCollection = client.db("techInfoDB").collection("cart")
     
-
+    app.get('/products/:brand' , async(req , res) => {
+      const brand = req.params.brand ;
+      const filter = { brandName : brand};
+      const cursor = productCollection.find(filter);
+      const result = await cursor.toArray();
+      res.send(result);
+  })
     
     app.get ('/products/:id' , async (req, res) => {
 
@@ -42,6 +48,7 @@ async function run() {
     })
     app.put( '/products/:id' , async(req , res) => {
         const id = req.params.id;
+        
       const filter = { _id : new ObjectId(id)} ;
         const options = { upsert: true };
         const updateProduct = req.body ;
@@ -61,6 +68,7 @@ async function run() {
           res.send(result)
         
     })
+   
     app.get('/products' , async(req , res) => {
         const cursor = productCollection.find();
         const result = await cursor.toArray();
@@ -70,7 +78,7 @@ async function run() {
 
     app.post( '/products' , async (req , res) => {
         const product = req.body ;
-        console.log(product)
+        console.log(product);
         const result = await productCollection.insertOne(product);
         res.send(result);
         
@@ -83,6 +91,7 @@ async function run() {
 
     app.delete('/carts/:id' , async(req , res) => {
         const id = req.params.id;
+        console.log(req.body)
         const query = {_id : new ObjectId(id)};
         const result = await cartCollection.deleteOne(query);
         res.send(result)
@@ -107,5 +116,5 @@ run().catch(console.dir);
 
 
 app.listen( port , (req , res ) => {
-    console.log(`database is running successfully , ${port}`)
+    console.log(`database is running successfully , ${port} ` )
 })
