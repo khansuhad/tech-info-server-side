@@ -30,7 +30,7 @@ async function run() {
     const productCollection = client.db("techInfoDB").collection("product")
     const cartCollection = client.db("techInfoDB").collection("cart")
     
-    app.get('/products/:brand' , async(req , res) => {
+    app.get('/products/brand/:brand' , async(req , res) => {
       const brand = req.params.brand ;
       const filter = { brandName : brand};
       const cursor = productCollection.find(filter);
@@ -113,7 +113,9 @@ async function run() {
 }
 run().catch(console.dir);
 
-
+app.get('/' , (req , res) => {
+  res.send('data is coming soon...')
+})
 
 app.listen( port , (req , res ) => {
     console.log(`database is running successfully , ${port} ` )
